@@ -2480,10 +2480,20 @@ function refreshIcons() {
 }
 
 function syncDesktopFit() {
-  const canvasWidth = 1280;
-  const shouldScale = window.innerWidth < 900;
-  const scale = shouldScale ? window.innerWidth / canvasWidth : 1;
-  const minHeight = shouldScale ? window.innerHeight / scale : window.innerHeight;
+  const canvasWidth = 1440;
+  const viewportWidth = Math.min(
+    window.innerWidth,
+    document.documentElement.clientWidth || window.innerWidth,
+    window.visualViewport?.width || window.innerWidth
+  );
+  const viewportHeight = Math.min(
+    window.innerHeight,
+    document.documentElement.clientHeight || window.innerHeight,
+    window.visualViewport?.height || window.innerHeight
+  );
+  const shouldScale = viewportWidth < canvasWidth;
+  const scale = shouldScale ? viewportWidth / canvasWidth : 1;
+  const minHeight = shouldScale ? viewportHeight / scale : viewportHeight;
 
   document.documentElement.classList.toggle("is-scaled-desktop", shouldScale);
   document.documentElement.style.setProperty("--desktop-canvas-width", `${canvasWidth}px`);
@@ -2509,7 +2519,10 @@ function render() {
 }
 
 syncDesktopFit();
+window.addEventListener("load", syncDesktopFit);
 window.addEventListener("resize", syncDesktopFit);
 window.addEventListener("orientationchange", syncDesktopFit);
+window.visualViewport?.addEventListener("resize", syncDesktopFit);
+window.requestAnimationFrame(syncDesktopFit);
 wireControls();
 render();
