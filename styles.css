@@ -226,7 +226,6 @@ button svg,
 }
 
 .status-panel {
-  margin-top: auto;
   padding: 14px;
   border: 1px solid #29333e;
   border-radius: var(--radius);
