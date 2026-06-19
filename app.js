@@ -2479,6 +2479,18 @@ function refreshIcons() {
   }
 }
 
+function syncDesktopFit() {
+  const canvasWidth = 1280;
+  const shouldScale = window.innerWidth < 900;
+  const scale = shouldScale ? window.innerWidth / canvasWidth : 1;
+  const minHeight = shouldScale ? window.innerHeight / scale : window.innerHeight;
+
+  document.documentElement.classList.toggle("is-scaled-desktop", shouldScale);
+  document.documentElement.style.setProperty("--desktop-canvas-width", `${canvasWidth}px`);
+  document.documentElement.style.setProperty("--desktop-fit-scale", String(scale));
+  document.documentElement.style.setProperty("--desktop-fit-min-height", `${minHeight}px`);
+}
+
 function render() {
   const filtered = getFilteredElements();
   renderCategories();
@@ -2496,5 +2508,8 @@ function render() {
   refreshIcons();
 }
 
+syncDesktopFit();
+window.addEventListener("resize", syncDesktopFit);
+window.addEventListener("orientationchange", syncDesktopFit);
 wireControls();
 render();

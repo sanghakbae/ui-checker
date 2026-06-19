@@ -13,6 +13,9 @@
   --good: #15803d;
   --shadow: 0 18px 40px rgba(20, 30, 45, 0.08);
   --radius: 8px;
+  --desktop-canvas-width: 1280px;
+  --desktop-fit-scale: 1;
+  --desktop-fit-min-height: 100vh;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -22,7 +25,7 @@
 
 body {
   margin: 0;
-  min-width: 1280px;
+  min-width: 0;
   min-height: 100vh;
   background: var(--bg);
   color: var(--text);
@@ -55,6 +58,8 @@ button {
   display: flex;
   flex-direction: column;
   gap: 24px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .brand {
@@ -92,7 +97,7 @@ button {
 }
 
 .component-side-panel {
-  min-height: 0;
+  flex: 0 0 auto;
   display: grid;
   gap: 8px;
 }
@@ -103,9 +108,9 @@ button {
 }
 
 .component-side-list {
-  max-height: min(42vh, 420px);
-  padding-right: 4px;
-  overflow: auto;
+  max-height: none;
+  padding-right: 0;
+  overflow: visible;
   display: grid;
   gap: 4px;
 }
@@ -3453,5 +3458,98 @@ h2 {
 
   .viewer-spec-table {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  html.is-scaled-desktop,
+  html.is-scaled-desktop body {
+    width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  html.is-scaled-desktop .app-shell {
+    width: var(--desktop-canvas-width);
+    min-width: var(--desktop-canvas-width);
+    min-height: var(--desktop-fit-min-height);
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    transform: scale(var(--desktop-fit-scale));
+    transform-origin: top left;
+  }
+
+  html.is-scaled-desktop .sidebar {
+    position: sticky;
+    top: 0;
+    height: var(--desktop-fit-min-height);
+    padding: 24px 18px;
+  }
+
+  html.is-scaled-desktop .workspace {
+    padding: 28px;
+  }
+
+  html.is-scaled-desktop .topbar,
+  html.is-scaled-desktop .control-strip,
+  html.is-scaled-desktop .section-heading {
+    align-items: flex-start;
+    flex-direction: row;
+  }
+
+  html.is-scaled-desktop .topbar-actions {
+    width: auto;
+  }
+
+  html.is-scaled-desktop .primary-button {
+    flex: 0 0 auto;
+  }
+
+  html.is-scaled-desktop .overview-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  html.is-scaled-desktop .element-grid,
+  html.is-scaled-desktop .flow-map,
+  html.is-scaled-desktop .nav-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  html.is-scaled-desktop .device-section {
+    grid-template-columns: minmax(0, 1fr) 420px;
+  }
+
+  html.is-scaled-desktop .content-layout {
+    grid-template-columns: minmax(0, 1fr) 360px;
+  }
+
+  html.is-scaled-desktop .detail-pane,
+  html.is-scaled-desktop .component-viewer {
+    position: sticky;
+  }
+
+  html.is-scaled-desktop .analysis-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  html.is-scaled-desktop .component-device-filter,
+  html.is-scaled-desktop .segmented-control {
+    width: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  html.is-scaled-desktop .device-control {
+    width: auto;
+    grid-template-columns: repeat(3, minmax(92px, 1fr));
+  }
+
+  html.is-scaled-desktop .spec-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  html.is-scaled-desktop .practice-control,
+  html.is-scaled-desktop .viewer-spec-row,
+  html.is-scaled-desktop .viewer-spec-table {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
